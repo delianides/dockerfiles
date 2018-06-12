@@ -1,9 +1,10 @@
-FROM python:2-alpine
+FROM alpine:latest
 
 RUN	apk add --no-cache \
 	ca-certificates \
 	bash \
-	parallel
+	parallel \
+	python
 
 # Install google cloud sdk
 # Download clean-registry script
@@ -37,7 +38,7 @@ RUN set -x \
 		gcc \
 		libc-dev \
 		libgcc \
-	&& go get github.com/jessfraz/reg \
+	&& go get github.com/genuinetools/reg \
 	&& mv ${GOPATH}/bin/reg /usr/bin/reg \
 	&& apk del .build-deps \
 	&& rm -rf /go \
