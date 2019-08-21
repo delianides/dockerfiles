@@ -21,7 +21,7 @@
 #
 # Access the controller in your browser at: https://127.0.0.1:8443
 #
-# If existing devices are showing up as "disconnected" once logged in, 
+# If existing devices are showing up as "disconnected" once logged in,
 # SSH into each device and run:
 # 	set-inform http://ip_of_docker_host:8080/inform
 #
@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
 	&& rm -rf /var/lib/apt/lists/*
 
 # install gosu
-ENV GOSU_VERSION 1.10
+ENV GOSU_VERSION 1.11
 RUN set -ex; \
 	\
 	fetchDeps=' \
@@ -56,7 +56,13 @@ RUN set -ex; \
 	\
 # verify the signature
 	export GNUPGHOME="$(mktemp -d)"; \
-	gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+    for server in $(shuf -e ha.pool.sks-keyservers.net \
+                            hkp://p80.pool.sks-keyservers.net:80 \
+                            keyserver.ubuntu.com \
+                            hkp://keyserver.ubuntu.com:80 \
+                            pgp.mit.edu) ; do \
+        gpg --keyserver "$server" --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4 && break || : ; \
+    done && \
 	gpg --batch --verify /usr/local/bin/gosu.asc /usr/local/bin/gosu; \
 	rm -r "$GNUPGHOME" /usr/local/bin/gosu.asc; \
 	\
@@ -82,21 +88,16 @@ RUN apt-get update && apt-get install -y \
 
 # unifi version
 # From: https://www.ubnt.com/download/unifi/
-ENV UNIFI_VERSION "5.7.23"
+ENV UNIFI_VERSION "5.10.25"
 
 # install unifi
-RUN buildDeps=' \
+RUN apt-get update && apt-get install -y \
 		curl \
-	' \
-	set -x \
-	&& apt-get update && apt-get install -y \
- 		$buildDeps \
 		--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& curl -o /tmp/unifi.deb -L "http://dl.ubnt.com/unifi/${UNIFI_VERSION}/unifi_sysvinit_all.deb" \
 	&& dpkg -i /tmp/unifi.deb \
 	&& rm -rf /tmp/unifi.deb \
-	&& apt-get purge -y $buildDeps \
 	&& echo "Build complete."
 
 WORKDIR /config

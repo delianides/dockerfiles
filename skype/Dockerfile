@@ -10,7 +10,7 @@
 #	--name skype \
 #	jess/skype
 #
-FROM debian:jessie
+FROM debian:bullseye-slim
 
 # Tell debconf to run in non-interactive mode
 ENV DEBIAN_FRONTEND noninteractive
@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y \
 	apt-transport-https \
 	ca-certificates \
 	curl \
+	gnupg \
+	procps \
 	--no-install-recommends
 
 # Add the skype debian repo

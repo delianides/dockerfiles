@@ -19,7 +19,7 @@
 #
 
 # Base docker image
-FROM debian:stretch-slim
+FROM debian:bullseye-slim
 
 LABEL maintainer "Jessie Frazelle <jess@linux.com>"
 
@@ -29,12 +29,12 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN apt-get update && apt-get install -y \
 	apt-transport-https \
 	ca-certificates \
-	curl \
 	gnupg \
+	wget \
 	--no-install-recommends
 
 # Add the atom debian repo
-RUN curl -sSL https://packagecloud.io/AtomEditor/atom/gpgkey | apt-key add -
+RUN wget -qO- https://packagecloud.io/AtomEditor/atom/gpgkey | apt-key add -
 RUN sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
 
 # Install dependencies
@@ -47,7 +47,6 @@ RUN apt-get update && apt-get install -y \
 	libasound2 \
 	libcap2 \
 	libgconf-2-4 \
-	libgnome-keyring-dev \
 	libgtk2.0-0 \
 	libnotify4 \
 	libnss3 \

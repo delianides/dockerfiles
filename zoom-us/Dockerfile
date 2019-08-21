@@ -1,14 +1,13 @@
-# docker build . -t zoom-us
 # docker run -d --rm \
-# -v /tmp/.X11-unix:/tmp/.X11-unix \
-# -e DISPLAY=unix\$DISPLAY \
-# --device /dev/video0 \
-# --device /dev/snd:/dev/snd \
-# --device /dev/dri \
-# -v /dev/shm:/dev/shm \
-# zoom-us
+# 	-v /tmp/.X11-unix:/tmp/.X11-unix \
+# 	-e DISPLAY=unix\$DISPLAY \
+#	--device /dev/video0 \
+#	--device /dev/snd:/dev/snd \
+#	--device /dev/dri \
+#	-v /dev/shm:/dev/shm \
+#	jess/zoom-us
 
-FROM debian:buster
+FROM debian:sid-slim
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -19,7 +18,6 @@ RUN apt-get update && apt-get install -y \
 	desktop-file-utils \
 	ibus \
 	ibus-gtk \
-	ibus-qt4 \
 	lib32z1 \
 	libx11-6 \
 	libasound2-dev \
@@ -43,7 +41,6 @@ RUN apt-get update && apt-get install -y \
 	libxcb-image0 \
 	libxcb-keysyms1 \
 	libxcb-xtest0 \
-	libibus-qt1 \
 	libnss3 \
 	libxss1 \
 	sudo \
