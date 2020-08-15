@@ -29,9 +29,9 @@ RUN apt-get update && apt-get install -y \
 	--no-install-recommends \
 	&& rm -rf /var/lib/apt/lists/*
 
-ENV CONSUL_VERSION v1.6.0-beta2
+ENV CONSUL_VERSION v1.8.0-beta2
 
-RUN go get github.com/hashicorp/consul
+RUN go get github.com/hashicorp/consul || true
 
 WORKDIR /go/src/github.com/hashicorp/consul
 

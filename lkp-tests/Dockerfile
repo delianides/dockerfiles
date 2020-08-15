@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM debian:buster-slim
 LABEL maintainer "Jessie Frazelle <jess@linux.com>"
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,7 +10,6 @@ RUN dpkg --add-architecture i386 \
 	bc \
 	binutils-dev \
 	bison \
-	bsdtar \
 	build-essential \
 	bzip2 \
 	ca-certificates \
